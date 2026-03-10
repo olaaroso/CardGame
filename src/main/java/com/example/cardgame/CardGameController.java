@@ -10,6 +10,8 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,15 +39,47 @@ public class CardGameController {
         currentCardValues.clear();
         expressionField.clear();
 
-        String[] suits = {"♠", "♥", "♦", "♣"};
-        Color[] suitColors = {Color.BLACK, Color.RED, Color.RED, Color.BLACK};
+        // Use words so they match the .png file names
+        String[] suits = {"spades", "hearts", "diamonds", "clubs"};
 
         for (int i = 0; i < 4; i++) {
-            int value = random.nextInt(13) + 1; // 1-13
+            int value = random.nextInt(13) + 1; // Generates 1 to 13
             int suitIndex = random.nextInt(4);
+
             currentCardValues.add(value);
-            cardBox.getChildren().add(createCardVisual(value, suits[suitIndex], suitColors[suitIndex]));
+
+            // Call our new image method!
+            cardBox.getChildren().add(createCardImageView(value, suits[suitIndex]));
         }
+    }
+
+    private StackPane createCardImageView(int value, String suit) {
+        // Convert numbers 1, 11, 12, 13 into their face names for the file path
+        String valueName = switch (value) {
+            case 1 -> "ace";
+            case 11 -> "jack";
+            case 12 -> "queen";
+            case 13 -> "king";
+            default -> String.valueOf(value); // Keeps 2 through 10 as numbers
+        };
+
+        String fileName = valueName + "_of_" + suit + ".png";
+
+        String imagePath = "/com/example/cardgame/png/" + fileName;
+
+        // Loads image from the resources folder
+        Image image = new Image(getClass().getResourceAsStream(imagePath));
+        ImageView imageView = new ImageView(image);
+
+        // Scales the image down
+        imageView.setFitWidth(90);
+        imageView.setFitHeight(130);
+        imageView.setPreserveRatio(true);
+
+        StackPane cardWrapper = new StackPane(imageView);
+        cardWrapper.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 4; -fx-background-color: white; -fx-background-radius: 4;");
+
+        return cardWrapper;
     }
 
     @FXML
@@ -80,25 +114,6 @@ public class CardGameController {
         }
     }
 
-    private StackPane createCardVisual(int value, String suit, Color color) {
-        String face = switch (value) {
-            case 1 -> "A";
-            case 11 -> "J";
-            case 12 -> "Q";
-            case 13 -> "K";
-            default -> String.valueOf(value);
-        };
-
-        Rectangle bg = new Rectangle(80, 110);
-        bg.getStyleClass().add("card-bg"); // Links to CSS
-
-        Text text = new Text(face + "\n" + suit);
-        text.setFont(Font.font("Arial", FontWeight.BOLD, 24));
-        text.setFill(color);
-        text.setStyle("-fx-text-alignment: center;");
-
-        return new StackPane(bg, text);
-    }
 
     private List<Integer> extractNumbers(String expr) {
         List<Integer> nums = new ArrayList<>();
@@ -111,7 +126,6 @@ public class CardGameController {
     }
 
     private double evaluateMath(final String str) {
-        // Recursive descent parser for math
         return new Object() {
             int pos = -1, ch;
             void nextChar() { ch = (++pos < str.length()) ? str.charAt(pos) : -1; }
