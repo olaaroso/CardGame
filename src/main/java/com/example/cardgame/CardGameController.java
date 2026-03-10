@@ -79,6 +79,8 @@ public class CardGameController {
         StackPane cardWrapper = new StackPane(imageView);
         cardWrapper.setStyle("-fx-border-color: black; -fx-border-width: 2; -fx-border-radius: 4; -fx-background-color: white; -fx-background-radius: 4;");
 
+        cardWrapper.setMaxSize(StackPane.USE_PREF_SIZE, StackPane.USE_PREF_SIZE);
+
         return cardWrapper;
     }
 
