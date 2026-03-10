@@ -1,0 +1,30 @@
+.root {
+    -fx-background-color: #f0f0f0;
+    -fx-font-family: "Segoe UI", Arial, sans-serif;
+}
+
+.action-btn {
+    -fx-background-color: #e0e8f0;
+    -fx-border-color: #a0b0c0;
+    -fx-border-radius: 3;
+    -fx-background-radius: 3;
+    -fx-padding: 5 15 5 15;
+    -fx-cursor: hand;
+}
+
+.action-btn:hover {
+    -fx-background-color: #d0e0f0;
+}
+
+.bold-label {
+    -fx-font-weight: bold;
+    -fx-font-size: 14px;
+}
+
+.card-bg {
+    -fx-fill: white;
+    -fx-stroke: #333333;
+    -fx-stroke-width: 1.5;
+    -fx-arc-width: 10;
+    -fx-arc-height: 10;
+}
